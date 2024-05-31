@@ -1,0 +1,4 @@
+*.iso
+isodir
+sysroot
+cmake-build-debug
