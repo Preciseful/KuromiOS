@@ -4,8 +4,27 @@
 #include <stdio.h>
 #include <string.h>
 
-static bool print(const char* data, size_t length) {
-	const unsigned char* bytes = (const unsigned char*) data;
+static size_t itos(int num, char *str) {
+	int i = 0;
+
+	do {
+		str[i++] = num % 10 + '0';
+		num /= 10;
+	} while (num != 0);
+
+	str[i] = '\0';
+
+	for (int start = 0, end = i - 1; start < end; ++start, --end) {
+		char temp = str[start];
+		str[start] = str[end];
+		str[end] = temp;
+	}
+
+	return i;
+}
+
+static bool print(const char *data, size_t length) {
+	const unsigned char *bytes = (const unsigned char *)data;
 	for (size_t i = 0; i < length; i++)
 		if (putchar(bytes[i]) == EOF)
 			return false;
@@ -52,7 +71,7 @@ int printf(const char* restrict format, ...) {
 			written++;
 		} else if (*format == 's') {
 			format++;
-			const char* str = va_arg(parameters, const char*);
+			const char *str = va_arg(parameters, const char*);
 			size_t len = strlen(str);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
@@ -61,6 +80,21 @@ int printf(const char* restrict format, ...) {
 			if (!print(str, len))
 				return -1;
 			written += len;
+		} else if (*format == 'i') {
+			format++;
+			int val = va_arg(parameters, int);
+			char str[11];
+			size_t len = itos(val, str);
+
+			if (maxrem < len) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+
+			if (!print(str, len))
+				return -1;
+			written += len;
+
 		} else {
 			format = format_begun_at;
 			size_t len = strlen(format);

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #if defined(__is_libk)
-#include <kernel/pmm.h>
+#include <kernel/heap.h>
 #endif
 
 void free(void *ptr) {

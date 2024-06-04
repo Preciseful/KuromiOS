@@ -19,7 +19,12 @@ stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
 
-# The kernel entry point.
+.section    .data
+.globl      gdtr
+gdtr:
+    .short 0              # For limit storage
+    .int 0                # For base storage
+
 .section .text
 .global loadPageDirectory
 .type loadPageDirectory, @function
@@ -30,6 +35,29 @@ loadPageDirectory:
     mov %eax, %cr3
     mov %ebp, %esp
     pop %ebp
+    ret
+
+.global     setGdt
+.type       setGdt, @function
+setGdt:
+  mov 4(%esp), %ax
+  mov %ax, gdtr
+  mov 8(%esp), %eax
+  mov %eax, gdtr+2
+  lgdt gdtr
+  ret
+
+.global reloadSegments
+.type reloadSegments, @function
+reloadSegments:
+    ljmpl $0x08, $reload_CS
+reload_CS:
+    mov $0x10, %ax          # 0x10 is a stand-in for your data segment
+    mov %ax, %ds
+    mov %ax, %es
+    mov %ax, %fs
+    mov %ax, %gs
+    mov %ax, %ss
     ret
 
 .global enablePaging
@@ -44,6 +72,7 @@ enablePaging:
     pop %ebp
     ret
 
+# The kernel entry point.
 .global _start
 .type _start, @function
 _start:
@@ -52,7 +81,7 @@ _start:
 	# Call the global constructors.
 	call _init
 
-    cli
+
 
 	# Transfer control to the main kernel.
 	call kernel_main

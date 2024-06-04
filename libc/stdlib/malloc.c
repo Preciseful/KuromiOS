@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #if defined(__is_libk)
-#include <kernel/pmm.h>
+#include <kernel/heap.h>
 #endif
 
 void malloc(uint32_t size) {

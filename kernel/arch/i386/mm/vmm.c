@@ -37,7 +37,7 @@ void init_vmm() {
     // attributes: supervisor level, read/write, present
     directory[0] = (unsigned int)first_table | 3;
 
-    loadPageDirectory(directory);
+    loadPageDirectory((unsigned int *)directory);
     enablePaging();
 }
 

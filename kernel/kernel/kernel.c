@@ -4,10 +4,11 @@
 #include <kernel/debug.h>
 
 #include <kernel/debug.h>
+#include <kernel/gdt.h>
 #include <kernel/vmm.h>
 #include <kernel/heap.h>
 
-#include "kernel/pmm.h"
+#include <kernel/pmm.h>
 
 void kernel_main(void) {
 	init_terminal();
@@ -25,4 +26,7 @@ void kernel_main(void) {
 	heap_t kheap;
 	init_kheap(&kheap);
 	WARN("Heap initialized, but the start mark might not be good.\n");
+
+	init_gdt();
+	SUCCESS("GDT initialized.\n");
 }

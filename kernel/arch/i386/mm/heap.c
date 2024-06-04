@@ -93,8 +93,7 @@ void *kheap_malloc(uint32_t size) {
         }
     }
 
-    ERROR("Malloc failed!");
-    return 0;
+    ERROR("Malloc failed!") AND_RETURN(0);
 }
 
 void kheap_free(void *ptr) {

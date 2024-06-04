@@ -39,4 +39,6 @@ add_executable(KuromiOS
         libc/stdlib/free.c
         kernel/arch/i386/mm/heap.c
         kernel/include/kernel/heap.h
+        kernel/arch/i386/gdt.c
+        kernel/include/kernel/gdt.h
 )
