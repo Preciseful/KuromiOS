@@ -3,12 +3,17 @@
 
 #include <sys/cdefs.h>
 
+#include "stdint.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 __attribute__((__noreturn__))
 void abort(void);
+
+void malloc(uint32_t size);
+void free(void *ptr);
 
 #ifdef __cplusplus
 }

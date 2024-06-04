@@ -2,7 +2,7 @@ DEFAULT_HOST!=../default-host.sh
 HOST?=DEFAULT_HOST
 HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
-CFLAGS?=-O2 -g
+CFLAGS?=-Og -g
 CPPFLAGS?=
 LDFLAGS?=
 LIBS?=
@@ -33,6 +33,8 @@ stdio/printf.o \
 stdio/putchar.o \
 stdio/puts.o \
 stdlib/abort.o \
+stdlib/free.o \
+stdlib/malloc.o \
 string/memcmp.o \
 string/memcpy.o \
 string/memmove.o \

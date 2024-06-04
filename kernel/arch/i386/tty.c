@@ -4,8 +4,8 @@
 #include <string.h>
 
 #include <kernel/tty.h>
-
-#include "vga.h"
+#include <kernel/vga.h>
+#include <sys/io.h>
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -16,7 +16,7 @@ static size_t terminal_column;
 static uint8_t terminal_color;
 static uint16_t* terminal_buffer;
 
-void terminal_initialize(void) {
+void init_terminal(void) {
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
@@ -27,6 +27,15 @@ void terminal_initialize(void) {
 			terminal_buffer[index] = vga_entry(' ', terminal_color);
 		}
 	}
+}
+
+void update_cursor() {
+	const uint16_t pos = terminal_row * VGA_WIDTH + terminal_column;
+
+	outb(0x3D4, 0x0F);
+	outb(0x3D5, pos & 0xFF);
+	outb(0x3D4, 0x0E);
+	outb(0x3D5, pos >> 8 & 0xFF);
 }
 
 void terminal_setcolor(uint8_t color) {
@@ -41,10 +50,14 @@ void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
 void terminal_putchar(char c) {
 	unsigned char uc = c;
 	if (uc == '\n') {
-
+		terminal_row++;
+		terminal_column = 0;
+		update_cursor();
+		return;
 	}
 
 	terminal_putentryat(uc, terminal_color, terminal_column, terminal_row);
+	update_cursor();
 	if (++terminal_column == VGA_WIDTH) {
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
