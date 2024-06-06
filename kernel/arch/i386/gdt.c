@@ -44,5 +44,5 @@ void init_gdt() {
     encode_gdt_entry(&entries[32], 0, 0xFFFFF, 0xF2, 0xC); // user data segment
     encode_gdt_entry(&entries[40], &task_state, sizeof(TSS_t) - 1, 0x89, 0x0);
 
-    setGdt(0xFFFFF, 0);
+    setGdt(sizeof(entries) - 1, 0);
 }

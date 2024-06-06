@@ -7,11 +7,6 @@
 
 #include <stdint.h>
 
-typedef struct {
-    uint16_t size;
-    uint32_t offset;
-} __attribute__((packed)) gdtr_t;
-
 typedef struct __attribute__((packed)) {
     uint8_t a: 1;
     uint8_t rw: 1;
@@ -37,7 +32,7 @@ typedef struct __attribute__((packed)) {
     uint8_t second_limit: 4;
     flags_t flags;
     uint8_t tbase;
-} segment_descriptor_t;
+} system_segment_descriptor_t;
 
 typedef struct __attribute__((packed)) {
     uint32_t link;           // This segment's link to previous task, if nested
