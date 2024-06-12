@@ -7,6 +7,7 @@
 #include <kernel/gdt.h>
 #include <kernel/vmm.h>
 #include <kernel/heap.h>
+#include <kernel/idt.h>
 
 #include <kernel/pmm.h>
 
@@ -19,6 +20,12 @@ void kernel_main(void) {
 	printf("[KuromiOS]\n\n");
 
 	SUCCESS("Terminal initialized.\n");
+	init_gdt();
+	SUCCESS("GDT initialized.\n");
+
+	init_idt();
+	SUCCESS("IDT initialized.\n");
+
 	init_vmm();
 	init_pmm();
 	WARN("VMM and PMM initialized, but function 'map_page' has not been tested.\n");
@@ -27,6 +34,5 @@ void kernel_main(void) {
 	init_kheap(&kheap);
 	WARN("Heap initialized, but the start mark might not be good.\n");
 
-	init_gdt();
-	SUCCESS("GDT initialized.\n");
+	__asm__ volatile("int $0");
 }

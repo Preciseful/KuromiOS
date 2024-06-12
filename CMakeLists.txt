@@ -41,4 +41,6 @@ add_executable(KuromiOS
         kernel/include/kernel/heap.h
         kernel/arch/i386/gdt.c
         kernel/include/kernel/gdt.h
+        kernel/arch/i386/idt.c
+        kernel/include/kernel/idt.h
 )

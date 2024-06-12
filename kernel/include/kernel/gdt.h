@@ -15,24 +15,24 @@ typedef struct __attribute__((packed)) {
     uint8_t s: 1;
     uint8_t dpl: 2;
     uint8_t p: 1;
-} access_byte_t;
+} gdt_access_byte_t;
 
 typedef struct __attribute__((packed)) {
     uint8_t reserved: 1;
-    uint8_t l: 1;
-    uint8_t db: 1;
-    uint8_t g: 1;
-} flags_t;
+    uint8_t long_mode: 1;
+    uint8_t size: 1;
+    uint8_t granularity: 1;
+} gdt_flags_t;
 
 typedef struct __attribute__((packed)) {
-    uint16_t limit;
-    uint16_t fbase;
-    uint8_t sbase;
-    access_byte_t access;
-    uint8_t second_limit: 4;
-    flags_t flags;
-    uint8_t tbase;
-} system_segment_descriptor_t;
+    uint16_t limit_1;
+    uint16_t base_1;
+    uint8_t base_2;
+    gdt_access_byte_t access;
+    uint8_t limit_2: 4;
+    gdt_flags_t flags;
+    uint8_t base_3;
+} gdtr_entry;
 
 typedef struct __attribute__((packed)) {
     uint32_t link;           // This segment's link to previous task, if nested
